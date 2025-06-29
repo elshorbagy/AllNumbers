@@ -1,35 +1,53 @@
-﻿using AllNumbers.Models;
+﻿using AllNumbers.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace AllNumbers
+namespace AllNumbers;
+
+internal class Program
 {
-    internal class Program
+    private static void Main()
     {
-        private static ICharactersCombination _charactersCombination;
+        using var serviceProvider = BuildDependencies();
 
-        private static void Main()
+        var characterService = serviceProvider.GetRequiredService<ICharactersCombination>();
+
+        Console.WriteLine("Enter a number:");
+
+        var input = Console.ReadLine();
+
+        if (!int.TryParse(input, out var number))
         {
-            try
-            {
-                Console.WriteLine("Enter a number:");
-                var input = Console.ReadLine();
-
-                BuildDependencies();
-                Console.Write(_charactersCombination.GetAllCombinations(Convert.ToInt32(input)));
-                Console.ReadKey();
-            }
-            catch (Exception exception)
-            {
-                Console.Write(exception.Message);
-                Console.ReadKey();
-            }
+            Console.WriteLine("Invalid number. Please enter a valid integer.");
+            WaitForExit();
+            return;
         }
 
-        private static void BuildDependencies()
+        try
         {
-            var service = DependencyBuilding.Build();
-            _charactersCombination = service.GetService<ICharactersCombination>();
+            var result = characterService.GetAllCombinations(number);
+            Console.WriteLine(result);
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred: {ex.Message}");
+        }
+
+        WaitForExit();
+    }
+
+    private static ServiceProvider BuildDependencies()
+    {
+        var services = new ServiceCollection();
+
+        services.AddTransient<ICharactersCombination, CharactersCombination>();
+
+        return services.BuildServiceProvider();
+    }
+
+    private static void WaitForExit()
+    {
+        Console.WriteLine("\nPress any key to exit...");
+        Console.ReadKey();
     }
 }

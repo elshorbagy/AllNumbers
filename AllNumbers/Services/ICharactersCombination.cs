@@ -1,4 +1,4 @@
-﻿namespace AllNumbers.Models
+﻿namespace AllNumbers.Services
 {
     public interface ICharactersCombination
     {

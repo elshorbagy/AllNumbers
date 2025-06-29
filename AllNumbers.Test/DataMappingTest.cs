@@ -1,16 +1,15 @@
-using AllNumbers.Common;
+using AllNumbers.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AllNumbers.Test
+namespace AllNumbers.Test;
+
+[TestClass]
+public class DataMappingTest
 {
-    [TestClass]
-    public class DataMappingTest
+    [TestMethod]
+    public void GetCharactersByNumberTest()
     {
-        [TestMethod]
-        public void GetCharactersByNumberTest()
-        {
-            var result = DataMapping.GetCharactersByNumber(2);
-            Assert.AreEqual(result, "ABC");
-        }
+        var result = DataMapping.GetCharactersByNumber(2);
+        Assert.AreEqual(result, "ABC");
     }
 }
